@@ -1,0 +1,24 @@
+[package]
+name = "infinitesimal-os"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.90"
+publish = false
+description = "infinitesimalOS：面向学习的极小 x86_64 操作系统"
+
+[[bin]]
+name = "kernel"
+path = "src/main.rs"
+test = false
+bench = false
+
+# 不引入第三方 crate；core 由 Rust 工具链提供，不需要操作系统或堆。
+[profile.dev]
+panic = "abort"
+
+[profile.release]
+panic = "abort"       # 裸机尚无栈展开机制，panic 直接进入内核处理函数。
+opt-level = "z"       # 优先减少机器码，而非追求最高吞吐量。
+lto = true            # 跨模块优化，让链接器清除不可达实现。
+codegen-units = 1
+strip = "symbols"     # 发布文件不带符号表；学习调试可用 dev 构建。

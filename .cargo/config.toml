@@ -1,0 +1,7 @@
+[build]
+target = "x86_64-unknown-none"
+
+[target.x86_64-unknown-none]
+# 采用高半区静态内核；链接脚本由 build.rs 传递。
+# 不强制保存每个栈帧：发布版保持小巧，调试版仍有调试信息。
+rustflags = ["-C", "relocation-model=static", "-C", "code-model=kernel"]
